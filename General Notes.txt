@@ -1,0 +1,81 @@
+data/
+	/femalePulationFromKirsty
+					South African population data by most detailed wards and gender (entire ZA, wardIdNo).csv
+					Whole of SA women's population 18 and upwards - most detailed with codes no names.csv
+	/geoJson
+			/WC
+				/shelters
+					  	WCshelters.geojson		
+				/merge
+					  WCmerged.geojson, WCmerged.topojson, WCmerged.topojson.zip 	
+				*.geojson
+				
+	/kml
+		/EC/
+			*.kml
+	/sheltersFromKirsty
+					WesternCapeShelters GPS coordinates.csv	
+	/sundryStuff
+				wardId_munName.pkl
+
+
+
+Map generation web app
+	Leafletjs native layer format is geojson.
+	We can use topojson as well.
+	And we can use zipped topojson for smallest map layer data size	
+
+Process
+	multiFilesKmlToJson.py
+		Read data/kml/PROVINCE/kml.* files as input.
+		Apply kmlToJson.py to each file to produce *.geojson.
+			Also adds metadata properties.females=<all female count>
+			<all female count> comes from data/femalePopulationFromKirsty/wardPop.pkl
+		Write file to data/geoJson/PROVINCE/*.geojson
+		When all files have been converted, merge the geojson files using mergeGeoJsonFiles.py and place output file in dat/geojson/PROVINCE/merge/AAmerged.geojson. 
+
+
+	wardPopulation.py
+		Read entire SA ward population file and create a dict {wardId: #females}.
+		Pickle the dict as data/femalePopulationFromKirsty/wardPop.pkl  
+
+	mapWardIdToMunicipalName.py
+		Get each wardId per feature from data/geojson/AA/AAmerged.geojson file.
+		Write {wardId: [<Province>, <MunicName>]} to pickle data/sundryStuff/wardId_munName.pkl
+		
+
+
+	To add, del, change feature meta properties in an existing geojson file
+		geoJsonAddPropName.py
+		geoJsonChgPropName.py
+		geoJsonDelPropName.py
+
+
+
+
+
+
+
+
+To convert geojson to topojson
+
+geo2topo WCmerged.geojson > WCmerged.topojson
+
+
+/usr/local/n/versions/node/8.10.0/lib/node_modules/npm/bin/npm
+/usr/local/n/versions/node/8.10.0/lib/node_modules/topojson/node_modules/topojson-server/bin/geo2topo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
